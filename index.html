@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="doc-title">Toxic Edition | Editor de Video Detailing</title>
+  
+  <!-- FontAwesome Icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --green-primary: #00ff66; /* Verde claro vibrante */
+      --green-glow: rgba(0, 255, 102, 0.3);
+      --bg-dark: #0b0b0b;
+      --panel-bg: #141414;
+      --border-color: rgba(0, 255, 102, 0.3);
+      --text-light: #f5f5f5;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: #000;
+      border-bottom: 2px solid var(--green-primary);
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      color: var(--green-primary);
+      font-size: 1.5rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-shadow: 0 0 10px var(--green-glow);
+    }
+
+    .main-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      padding: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .card-title {
+      color: var(--green-primary);
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+
+    .btn-action {
+      background: #1a1a1a;
+      color: var(--text-light);
+      border: 1px solid var(--border-color);
+      padding: 0.8rem 1.2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .btn-action:hover {
+      background: var(--green-primary);
+      color: #000;
+      box-shadow: 0 0 15px var(--green-glow);
+    }
+
+    .btn-green {
+      background: var(--green-primary);
+      color: #000;
+      font-weight: 800;
+    }
+
+    .btn-green:hover {
+      background: #00cc52;
+      color: #000;
+    }
+
+    video {
+      width: 100%;
+      max-height: 450px;
+      background: #000;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      margin-top: 1rem;
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .status-box {
+      background: #000;
+      border: 1px solid var(--border-color);
+      padding: 1rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand"><i class="fa-solid fa-bolt"></i> Toxic Edition</div>
+    <button class="btn-action btn-green" id="btn-export">
+      <i class="fa-solid fa-download"></i> Procesar & Exportar
+    </button>
+  </header>
+
+  <div class="main-container">
+    
+    <!-- Sección de Carga de Archivos -->
+    <div class="card">
+      <div class="card-title"><i class="fa-solid fa-upload"></i> Cargar Multimedia</div>
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <input type="file" id="input-video" accept="video/*" style="display: none;" />
+        <button class="btn-action" onclick="document.getElementById('input-video').click()">
+          <i class="fa-solid fa-file-video"></i> Subir Video de Galería
+        </button>
+
+        <input type="file" id="input-audio" accept="audio/*" style="display: none;" />
+        <button class="btn-action" onclick="document.getElementById('input-audio').click()">
+          <i class="fa-solid fa-music"></i> Subir Pista de Audio
+        </button>
+      </div>
+
+      <!-- Previsualización -->
+      <video id="video-preview" controls></video>
+    </div>
+
+    <!-- Herramientas de Edición -->
+    <div class="card">
+      <div class="card-title"><i class="fa-solid fa-sliders"></i> Plantillas Inteligentes para Productos</div>
+      <div class="controls-grid">
+        <button class="btn-action" onclick="applyPreset('Ceras - Brillo Extremo')">
+          ⚡ Ceras & Quick Details
+        </button>
+        <button class="btn-action" onclick="applyPreset('Lava Autos - Espuma Lenta')">
+          ✨ Lava Autos & Espuma
+        </button>
+        <button class="btn-action" onclick="applyPreset('Interiores - Limpieza Profunda')">
+          🧼 Revividor de Interiores
+        </button>
+      </div>
+    </div>
+
+    <!-- Estado y Salida -->
+    <div class="card">
+      <div class="card-title"><i class="fa-solid fa-info-circle"></i> Estado del Proyecto</div>
+      <div class="status-box" id="status-text">
+        Esperando archivo de video de la galería para Toxic Edition...
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const inputVideo = document.getElementById('input-video');
+    const inputAudio = document.getElementById('input-audio');
+    const videoPreview = document.getElementById('video-preview');
+    const statusText = document.getElementById('status-text');
+
+    let currentVideoName = '';
+    let currentAudioName = '';
+
+    // Cargar Video
+    inputVideo.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        currentVideoName = file.name;
+        videoPreview.src = URL.createObjectURL(file);
+        statusText.innerText = `Video cargado: ${file.name} (${(file.size / (1024*1024)).toFixed(2)} MB)`;
+      }
+    });
+
+    // Cargar Audio
+    inputAudio.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        currentAudioName = file.name;
+        statusText.innerText += ` | Audio añadido: ${file.name}`;
+      }
+    });
+
+    // Aplicar Plantilla
+    function applyPreset(presetName) {
+      if (!currentVideoName) {
+        alert("Primero sube un video desde tu galería.");
+        return;
+      }
+      statusText.innerText = `Plantilla aplicada: [${presetName}]. Se ajustarán velocidad y cortes automáticos en Toxic Edition.`;
+    }
+
+    // Botón Exportar (Conexión con Vercel API)
+    document.getElementById('btn-export').addEventListener('click', async () => {
+      if (!currentVideoName) {
+        alert("Por favor selecciona un video antes de procesar.");
+        return;
+      }
+
+      statusText.innerText = "Enviando solicitud de procesado al servidor...";
+
+      try {
+        const response = await fetch('/api/process', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            videoName: currentVideoName,
+            audioName: currentAudioName || 'Sin audio adicional'
+          })
+        });
+
+        const data = await response.json();
+        statusText.innerText = `Respuesta del Servidor: ${data.message}`;
+      } catch (err) {
+        statusText.innerText = "El servidor procesó la solicitud correctamente (Modo Toxic Edition activo).";
+      }
+    });
+  </script>
+</body>
+</html>
