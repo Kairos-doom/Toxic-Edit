@@ -1,0 +1,15 @@
+{
+  "name": "Toxic Edition",
+  "short_name": "ToxicEdit",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b0b0b",
+  "theme_color": "#00ff66",
+  "icons": [
+    {
+      "src": "https://img.icons8.com/color/512/video-editor.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
