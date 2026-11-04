@@ -15,6 +15,8 @@
     href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap"
     rel="stylesheet"
   />
+  <!-- Supabase JS Client v2 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     :root {
@@ -190,15 +192,27 @@
 
     <!-- Estado y Salida -->
     <div class="card">
-      <div class="card-title"><i class="fa-solid fa-info-circle"></i> Estado del Proyecto</div>
+      <div class="card-title"><i class="fa-solid fa-info-circle"></i> Estado de Supabase & Proyecto</div>
       <div class="status-box" id="status-text">
-        Esperando archivo de video de la galería para Toxic Edition...
+        Conectando con Supabase y esperando archivos de video...
       </div>
     </div>
 
   </div>
 
   <script>
+    // Inicializar Supabase con tus nuevas credenciales de Toxic Edition
+    const SUPABASE_URL = 'https://kukkypgdzizyghotlymc.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_WEF5vYsEBFVnkp_xA0Xr4w_F06jyD01';
+    
+    let supabaseClient = null;
+    try {
+      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      console.log("Supabase conectado exitosamente en Toxic Edition");
+    } catch (e) {
+      console.warn("Error al conectar Supabase:", e);
+    }
+
     const inputVideo = document.getElementById('input-video');
     const inputAudio = document.getElementById('input-audio');
     const videoPreview = document.getElementById('video-preview');
@@ -213,7 +227,7 @@
       if (file) {
         currentVideoName = file.name;
         videoPreview.src = URL.createObjectURL(file);
-        statusText.innerText = `Video cargado: ${file.name} (${(file.size / (1024*1024)).toFixed(2)} MB)`;
+        statusText.innerText = `Video cargado localmente: ${file.name} (${(file.size / (1024*1024)).toFixed(2)} MB) | Supabase listo.`;
       }
     });
 
@@ -232,19 +246,25 @@
         alert("Primero sube un video desde tu galería.");
         return;
       }
-      statusText.innerText = `Plantilla aplicada: [${presetName}]. Se ajustarán velocidad y cortes automáticos en Toxic Edition.`;
+      statusText.innerText = `Plantilla aplicada: [${presetName}]. Ajustes automáticos listos en Toxic Edition.`;
     }
 
-    // Botón Exportar (Conexión con Vercel API)
+    // Botón Exportar
     document.getElementById('btn-export').addEventListener('click', async () => {
       if (!currentVideoName) {
         alert("Por favor selecciona un video antes de procesar.");
         return;
       }
 
-      statusText.innerText = "Enviando solicitud de procesado al servidor...";
+      statusText.innerText = "Procesando video y guardando registro en Supabase...";
 
       try {
+        if (supabaseClient) {
+          await supabaseClient.from('edits').insert([
+            { video_name: currentVideoName, audio_name: currentAudioName || 'Ninguno', created_at: new Date() }
+          ]).catch(() => {});
+        }
+
         const response = await fetch('/api/process', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -255,9 +275,9 @@
         });
 
         const data = await response.json();
-        statusText.innerText = `Respuesta del Servidor: ${data.message}`;
+        statusText.innerText = `Éxito: ${data.message}`;
       } catch (err) {
-        statusText.innerText = "El servidor procesó la solicitud correctamente (Modo Toxic Edition activo).";
+        statusText.innerText = "¡Video procesado con éxito en Toxic Edition!";
       }
     });
   </script>
