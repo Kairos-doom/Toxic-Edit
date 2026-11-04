@@ -6,24 +6,26 @@
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
   "orientation": "portrait",
   "background_color": "#0b0b0b",
   "theme_color": "#00ff66",
+  "lang": "es",
+  "dir": "ltr",
+  "categories": ["utilities", "multimedia", "productivity"],
   "icons": [
     {
-      "src": "https://img.icons8.com/color/512/video-editor.png",
+      "src": "https://via.placeholder.com/512/0b0b0b/00ff66?text=TE",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     }
   ],
-  "screenshots": [
+  "shortcuts": [
     {
-      "src": "https://img.icons8.com/color/512/video-editor.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "Toxic Edition Dashboard"
+      "name": "Subir Video",
+      "url": "/",
+      "description": "Subir un video de galería para editar"
     }
   ]
 }
